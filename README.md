@@ -8,13 +8,12 @@ Currently, the processor supports a fully functional **single-cycle datapath** w
 ## Development Progress
 | Stage | Description | Status |
 |:------|:-------------|:--------|
-| 0 | Environment setup & Verilog fundamentals | ✅ Complete |
-| 1 | Instruction memory & fetch stage | ✅ Complete |
-| 2 | Decode stage (instruction field extraction) | ✅ Complete |
-| 3 | Register file & execute (ALU, branch logic) | ✅ Complete |
-| 4 | Memory & write-back stages, full single-cycle datapath | ✅ Complete |
-| 5 | 5-stage pipelined design (with forwarding) | ⏳ In progress |
-| 6 | FPGA deployment (PYNQ-Z1) | ⏳ Pending |
+| 0 | Instruction memory & fetch stage | ✅ Complete |
+| 1 | Decode stage (instruction field extraction) | ✅ Complete |
+| 2 | Register file & execute (ALU, branch logic) | ✅ Complete |
+| 3 | Memory & write-back stages, full single-cycle datapath | ✅ Complete |
+| 4 | 5-stage pipelined design (with forwarding and bypassing) | ⏳ In progress |
+| 5 | FPGA deployment (PYNQ-Z1) | ⏳ Pending |
 
 ## System Architecture
 The single-cycle datapath integrates the following components:
