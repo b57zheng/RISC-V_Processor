@@ -2,7 +2,7 @@
 
 ## Overview
 This project implements a **RV32I RISC-V processor** in Verilog.  
-The design follows the RISC-V base integer instruction set and progressively evolves toward a pipelined implementation through multiple project deliverables (PD0 – PD6).  
+The design follows the RISC-V base integer instruction set and progressively evolves toward a pipelined implementation.  
 Currently, the processor supports a fully functional **single-cycle datapath** with fetch, decode, execute, memory, and write-back stages.
 
 ## Development Progress
