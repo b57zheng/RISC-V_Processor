@@ -1,7 +1,7 @@
 # RISC-V Processor (Verilog)
 
 ## Overview
-This project implements a **RV32I RISC-V processor** in Verilog under guidance of Dr. Hiren Patel.  
+This project implements a **RV32I RISC-V processor** in Verilog under the guidance of Dr. Hiren Patel.  
 The design follows the RISC-V base integer instruction set and progressively evolves toward a pipelined implementation.  
 Currently, the processor supports a fully functional **single-cycle datapath** with fetch, decode, execute, memory, and write-back stages.
 
