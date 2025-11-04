@@ -39,3 +39,16 @@ make run TEST=test_pd MEM_PATH=../benchmarks/rv32ui-p-addi.x
 
 # View waveforms
 make waves
+```
+
+## Tools and Environment
+- **HDL:** Verilog (IEEE 1364)  
+- **Simulator:** Verilator 4.210  
+- **Waveform Viewer:** GTKWave  
+- **Target FPGA (future):** Xilinx PYNQ-Z1 (Vivado 2022.1)  
+- **Platform:** Ubuntu 20.04 LTS (ECE Linux servers)  
+
+## Future Work
+- Implement PD5 – 5-stage pipelined RISC-V processor with forwarding and stalling logic.  
+- Map the design to FPGA (PD6) for hardware validation and performance measurement.  
+- Develop SystemVerilog testbenches and add automated trace comparison scripts.  
