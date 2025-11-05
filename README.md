@@ -16,7 +16,7 @@ The single-cycle datapath integrates the following components:
 
 ## Simulation and Verification
 Simulation is performed using **Verilator v4.210** and waveform inspection with **GTKWave**.  
-Testbenches and golden traces are provided via the course repository to validate:
+Testbenches and golden traces are used to validate:
 - Instruction decoding correctness  
 - Register file read/write timing  
 - ALU and branch execution results  
