@@ -5,16 +5,6 @@ This project implements a **RV32I RISC-V processor** in Verilog under the guidan
 The design follows the RISC-V base integer instruction set and progressively evolves toward a pipelined implementation.  
 Currently, the processor supports a fully functional **single-cycle datapath** with fetch, decode, execute, memory, and write-back stages.
 
-## Development Progress
-| Stage | Description | Status |
-|:------|:-------------|:--------|
-| 0 | Instruction memory & fetch stage | ✅ Complete |
-| 1 | Decode stage (instruction field extraction) | ✅ Complete |
-| 2 | Register file & execute (ALU, branch logic) | ✅ Complete |
-| 3 | Memory & write-back stages, full single-cycle datapath | ✅ Complete |
-| 4 | 5-stage pipelined design (with forwarding and bypassing) | ⏳ In progress |
-| 5 | FPGA deployment (PYNQ-Z1) | ⏳ Pending |
-
 ## System Architecture
 The single-cycle datapath integrates the following components:
 - **Instruction Memory** – Byte-addressable memory supporting combinational reads and sequential writes.  
@@ -49,6 +39,6 @@ make waves
 - **Platform:** Ubuntu 20.04 LTS (ECE Linux servers)  
 
 ## Future Work
-- Implement PD5 – 5-stage pipelined RISC-V processor with forwarding and stalling logic.  
+- Implement 5-stage pipelined RISC-V processor with forwarding and stalling logic.  
 - Map the design to FPGA (PD6) for hardware validation and performance measurement.  
 - Develop SystemVerilog testbenches and add automated trace comparison scripts.  
