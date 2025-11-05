@@ -40,5 +40,5 @@ make waves
 
 ## Future Work
 - Implement 5-stage pipelined RISC-V processor with forwarding and stalling logic.  
-- Map the design to FPGA (PD6) for hardware validation and performance measurement.  
+- Map the design to FPGA for hardware validation and performance measurement.  
 - Develop SystemVerilog testbenches and add automated trace comparison scripts.  
