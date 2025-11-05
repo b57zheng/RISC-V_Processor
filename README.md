@@ -8,7 +8,7 @@ Currently, the processor supports a fully functional **single-cycle datapath** w
 ## System Architecture
 The single-cycle datapath integrates the following components:
 - **Instruction Memory** – Byte-addressable memory supporting combinational reads and sequential writes.  
-- **Register File** – Two combinational read ports, one sequential write port; initialized per RISC-V ABI (x2 = stack pointer).  
+- **Register File** – Two combinational read ports, one sequential write port; initialized per RISC-V reference sheet.  
 - **ALU / Execute Stage** – Handles arithmetic, logical, and branch comparison operations.  
 - **Memory Stage** – Supports `LW`, `SW`, and related data-memory instructions.  
 - **Writeback Stage** – Returns computed or loaded data to the register file.  
