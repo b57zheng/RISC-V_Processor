@@ -1,13 +1,4 @@
 /*
-Implement a register file as presented in class for the subset of the RISC-V ISA instructions decoded in
-PD2. We discussed the register file datapath design in class. That is the register file you are required to
-implement. The register file will be a synchronous component. Once again, reads in the register file
-are combinational, and the writes are sequential. The timing behaviour of the register file should be as
-follows: the output of the reads are available within the same clock cycle as when the address for the
-registers is supplied, and the writes to the registers are only available to be read in the next clock cycle.
-You should see a resemblance between your memory module implementation and your register file.
-Your register file module must have the following ports, with the exact port names provided:
-
 •clock (1 bit): input
 •addr_rs1 (5 bits): input to select the first source register
 •addr_rs2 (5 bits): input to select the second source register
@@ -32,7 +23,7 @@ can have the reset logic embedded inside write_enable (i.e. write_enable must be
 reset is high)
 */
 
-module register_file #()
+module register_file
 (
   input wire clock,
   input wire [4:0] addr_rs1,
@@ -45,42 +36,36 @@ module register_file #()
   output reg [31:0] data_rs2 
 );
 
-// Register file memory
-reg [31:0] regfile [0:31];
+
+(* ram_style="block" *) reg [31:0] regfile_a [0:31];
+(* ram_style="block" *) reg [31:0] regfile_b [0:31];
 integer i;
 initial begin
   for (i = 0; i < 32; i = i + 1) begin
     if (i == 2) begin
       // Initialize sp (x2) to stack top address
-      regfile[i] = 32'h01000000 + `MEM_DEPTH; 
+      regfile_a[i] = 32'h01000000 + `MEM_DEPTH; 
+      regfile_b[i] = 32'h01000000 + `MEM_DEPTH; 
     end else begin
       // Initialize all other registers to 0
-      regfile[i] = 32'b0;
+      regfile_a[i] = 32'b0;
+      regfile_b[i] = 32'b0;
     end
   end
   data_rs1 = 32'b0;
   data_rs2 = 32'b0;
 end
 
-// Combinational Read logic, x0 is always 0
-always @(*) begin
-  if (addr_rs1 == 5'b0) begin
-    data_rs1 = 32'b0; 
-  end else begin
-    data_rs1 = regfile[addr_rs1];
-  end
-  if (addr_rs2 == 5'b0) begin
-    data_rs2 = 32'b0; 
-  end else begin
-    data_rs2 = regfile[addr_rs2];
-  end
-end
-
-// Sequential Write, ignore writes to x0
+// Sequential Write/read, ignore writes to x0
 always @(posedge clock) begin
-  if (write_enable && (addr_rd != 5'b0)) begin
-    regfile[addr_rd] <= data_rd;
+  // Write to register file on write_enable
+  if (write_enable && addr_rd != 0) begin
+    regfile_a[addr_rd] <= data_rd;
+    regfile_b[addr_rd] <= data_rd;
   end
+  // Read from register file 
+  data_rs1 <= (addr_rs1 == 0) ? 32'b0 : regfile_a[addr_rs1];
+  data_rs2 <= (addr_rs2 == 0) ? 32'b0 : regfile_b[addr_rs2];
 end
 
 endmodule

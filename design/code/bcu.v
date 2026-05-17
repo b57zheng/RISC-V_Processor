@@ -1,7 +1,7 @@
 // Branch Control Unit
-`include "control_defs.vh"
+`include "control_defs.h"
 
-module bcu #()
+module bcu
 (
   input wire is_branch,
   input wire [2:0] funct3,

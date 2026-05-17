@@ -41,7 +41,7 @@ WARN_OUTPUT =
 WARN_CHECK  = 
 endif
 
-EXTRA_PACKAGE_FILES := 
+EXTRA_PACKAGE_FILES := ./build/design/imemory.v ./build/design/dmemory.v ./build/output/util_est_hier.txt
 
 include ${PROJECT_ROOT}/common/verif/tb/scripts/Makefile.common.inc
 

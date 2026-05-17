@@ -10,4 +10,5 @@ module design_wrapper(
     .clock(clock),
     .reset(reset)
   );
+
 endmodule

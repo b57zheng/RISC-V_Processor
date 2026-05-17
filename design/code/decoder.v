@@ -10,12 +10,11 @@ Notice that not all instructions in the table have a value for all fields. For t
 any value and we will treat it as a don’t care. Make sure to properly sign extend and pad the immediate
 value field.
 */
-`include "control_defs.vh"
+`include "control_defs.h"
 
 // Include Imm Gen and Control Gen
-module decoder #()
+module decoder 
 (
-  input wire [31:0] pc,
   input wire [31:0] inst,
 
   // Field Decoded
@@ -48,12 +47,12 @@ module decoder #()
 always @(*) begin
   // Default most common case
   opcode  = inst[6:0];
-  rd      = inst[11:7];       // Destination reg
-  funct3  = inst[14:12];      
-  rs1     = inst[19:15];      // Source 1 reg 
-  rs2     = inst[24:20];      // Source 2 reg
-  shamt   = inst[24:20];      // Shift amount
-  funct7  = inst[31:25];
+  rd      = 5'b0;
+  funct3  = 3'b0;
+  rs1     = 5'b0;
+  rs2     = 5'b0;
+  shamt   = 5'b0;
+  funct7  = 7'b0;
   imm     = 32'b0;
 
   PCSel        = `PC_PLUS4;
@@ -63,16 +62,20 @@ always @(*) begin
   BSel         = `B_REG;
   MemRW        = `MEM_READ;
   WBSel        = `WB_ALU;
-  LoadSize     = `LS_W;
+  LoadSize     = 2'b00;
   LoadUnsigned = `FALSE;
-  StoreSize    = `LS_W;
+  StoreSize    = 2'b00;
   IsJALR       = `FALSE;
   IsBranch     = `FALSE;
   
   case (opcode)
     // R-type --------------------------------------------
-    7'b0110011: begin  // Arithmetic
-      imm = 32'b0;
+    7'b0110011: begin  // Arithmetic (R-type)
+      rd     = inst[11:7];
+      funct3 = inst[14:12];
+      rs1    = inst[19:15];
+      rs2    = inst[24:20];
+      funct7 = inst[31:25];
       RegWEn = `TRUE;  // Write Reg file
       case (funct3)
         3'b000: ALUSel = (funct7[5] == 1'b0) ? `ALU_ADD : `ALU_SUB;
@@ -86,7 +89,11 @@ always @(*) begin
       endcase
     end
     // I-type --------------------------------------------
-    7'b1100111: begin  // JALR
+    7'b1100111: begin  // JALR (I-type)
+      rd     = inst[11:7];
+      funct3 = inst[14:12];
+      rs1    = inst[19:15];
+      shamt  = inst[24:20];
       imm    = {{20{inst[31]}}, inst[31:20]}; 
       PCSel  = `PC_ALU;
       RegWEn = `TRUE;  // Write Reg file      
@@ -96,6 +103,9 @@ always @(*) begin
       WBSel  = `WB_PC4; 
     end
     7'b0000011: begin  // Load
+      rd     = inst[11:7];
+      funct3 = inst[14:12];
+      rs1    = inst[19:15];
       imm = {{20{inst[31]}}, inst[31:20]}; 
       RegWEn = `TRUE;  
       ALUSel = `ALU_ADD;
@@ -120,6 +130,9 @@ always @(*) begin
       endcase
     end
     7'b0010011: begin  // Arithmetic Immediate
+      rd     = inst[11:7];
+      funct3 = inst[14:12];
+      rs1    = inst[19:15];
       if (funct3 == 3'b001 || funct3 == 3'b101) begin
         imm = {27'b0, shamt};
       end else begin
@@ -140,6 +153,9 @@ always @(*) begin
     end
     // S-type --------------------------------------------
     7'b0100011: begin  // Store
+      funct3 = inst[14:12];
+      rs1    = inst[19:15];
+      rs2    = inst[24:20];
       imm = {{20{inst[31]}}, inst[31:25], inst[11:7]};
       RegWEn = `FALSE;
       ALUSel = `ALU_ADD;
@@ -154,8 +170,10 @@ always @(*) begin
     end
     // B-type -------------------------------------------
     7'b1100011: begin  // Branch
-      imm = {{19{inst[31]}}, inst[31], inst[7], inst[30:25], 
-              inst[11:8], 1'b0};
+      funct3 = inst[14:12];
+      rs1    = inst[19:15];
+      rs2    = inst[24:20];
+      imm = {{19{inst[31]}}, inst[31], inst[7], inst[30:25], inst[11:8], 1'b0};
       IsBranch = `TRUE;
       ASel   = `A_PC;
       BSel   = `B_IMM;
@@ -165,6 +183,7 @@ always @(*) begin
     end
     // U-type -------------------------------------------
     7'b0110111: begin  // LUI
+      rd     = inst[11:7];
       imm    = {inst[31:12], 12'b0};
       RegWEn = `TRUE;  
       ALUSel = `ALU_COPY_B;
@@ -173,6 +192,7 @@ always @(*) begin
       WBSel  = `WB_ALU;
     end
     7'b0010111: begin  // AUIPC
+      rd  = inst[11:7];
       imm = {inst[31:12], 12'b0};
       RegWEn = `TRUE;
       ALUSel = `ALU_ADD;
@@ -182,8 +202,8 @@ always @(*) begin
     end
     // J-type -------------------------------------------
     7'b1101111: begin  // JAL
-      imm = {{11{inst[31]}}, inst[31], inst[19:12], inst[20], 
-              inst[30:21], 1'b0};
+      rd  = inst[11:7];
+      imm = {{11{inst[31]}}, inst[31], inst[19:12], inst[20], inst[30:21], 1'b0};
       PCSel  = `PC_ALU;
       RegWEn = `TRUE;
       ALUSel = `ALU_ADD;
