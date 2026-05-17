@@ -1,26 +1,27 @@
 # RISC-V Processor (Verilog)
 
 ## Overview
-This project implements a **RV32I RISC-V processor** in Verilog under the guidance of Dr. Hiren Patel.  
-The design follows the RISC-V base integer instruction set and progressively evolves toward a pipelined implementation.  
-Currently, the processor supports a fully functional **single-cycle datapath** with fetch, decode, execute, memory, and write-back stages.
+This project implements a **RV32I 5-stage pipelined processor** in Verilog under the guidance of Dr. Hiren Patel.  
+The design follows the RISC-V base integer instruction set and is adapted for FPGA deployment in PD6.  
+The current processor supports a fully functional **fetch‑decode‑execute‑memory‑writeback pipeline** with hazard bypassing and stalling logic.
 
 ## System Architecture
-The single-cycle datapath integrates the following components:
-- **Instruction Memory** – Byte-addressable memory supporting combinational reads and sequential writes.  
-- **Register File** – Two combinational read ports, one sequential write port; initialized per RISC-V reference sheet.  
-- **ALU / Execute Stage** – Handles arithmetic, logical, and branch comparison operations.  
-- **Memory Stage** – Supports `LW`, `SW`, and related data-memory instructions.  
-- **Writeback Stage** – Returns computed or loaded data to the register file.  
-- **Control Logic** – Minimal single-cycle control supporting all RV32I instruction formats.
+The pipelined datapath integrates the following components:
+- **Instruction Memory** – BRAM-backed memory with a 1-cycle read latency and dynamic loading support.  
+- **Register File** – BRAM-style register file with one-cycle reads and sequential write semantics.  
+- **ALU / Execute Stage** – Handles arithmetic, logical, shift, and branch comparison operations.  
+- **Memory Stage** – Supports `LW`, `SW`, and aligned/unaligned data-memory instructions.  
+- **Writeback Stage** – Writes computed or loaded data back to the register file.  
+- **Control Logic** – Pipeline control supporting RV32I instruction formats, branch handling, forwarding, and stalls.
 
 ## Simulation and Verification
 Simulation is performed using **Verilator v4.210** and waveform inspection with **GTKWave**.  
-Testbenches and golden traces are used to validate:
-- Instruction decoding correctness  
-- Register file read/write timing  
-- ALU and branch execution results  
-- End-to-end datapath behavior  
+Testbenches and golden trace comparisons are used to validate:
+- Instruction decoding and control signal correctness  
+- Pipeline register behavior and hazard resolution  
+- Register file read/write timing with BRAM latency  
+- ALU, branch, and memory execution behavior  
+- End-to-end program execution  
 
 ### Example Commands
 ```bash
@@ -35,10 +36,5 @@ make waves
 - **HDL:** Verilog (IEEE 1364)  
 - **Simulator:** Verilator 4.210  
 - **Waveform Viewer:** GTKWave  
-- **Target FPGA (future):** Xilinx PYNQ-Z1 (Vivado 2022.1)  
-- **Platform:** Ubuntu 20.04 LTS (ECE Linux servers)  
-
-## Future Work
-- Implement 5-stage pipelined RISC-V processor with forwarding and stalling logic.  
-- Map the design to FPGA for hardware validation and performance measurement.  
-- Develop SystemVerilog testbenches and add automated trace comparison scripts.  
+- **FPGA Target:** Xilinx PYNQ-Z1 (Vivado 2022.1)  
+- **Platform:** Ubuntu 20.04 LTS (ECE Linux servers)
